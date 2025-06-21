@@ -1,15 +1,36 @@
 import streamlit as st
 
-# 페이지 설정
-st.set_page_config(page_title="MBTI 진로 추천 💼", page_icon="🧠", layout="wide")
+st.set_page_config(page_title="MBTI 진로 추천", layout="wide")
 
 st.markdown(
-    "<h1 style='text-align: center; color: #6c5ce7;'>💫 MBTI 성격유형별 진로 추천 💫</h1>",
-    unsafe_allow_html=True,
+    """
+    <style>
+    .mbti-button {
+        display: inline-block;
+        margin: 10px;
+        padding: 20px 30px;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(145deg, #6a11cb, #2575fc);
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        transition: transform 0.2s;
+    }
+    .mbti-button:hover {
+        transform: scale(1.05);
+        background: linear-gradient(145deg, #8e2de2, #4a00e0);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
-st.markdown("<hr>", unsafe_allow_html=True)
 
-# MBTI 이모지 매핑
+st.markdown("<h1 style='text-align:center;'>🌟 MBTI 기반 진로 추천 웹앱 🌟</h1>", unsafe_allow_html=True)
+
 mbti_emojis = {
     "ISTJ": "🧱", "ISFJ": "🛡️", "INFJ": "🔮", "INTJ": "🧠",
     "ISTP": "🔧", "ISFP": "🎨", "INFP": "💖", "INTP": "📘",
@@ -17,72 +38,58 @@ mbti_emojis = {
     "ESTJ": "📋", "ESFJ": "🤝", "ENFJ": "💡", "ENTJ": "🏆"
 }
 
-# 추천 작업과 설명
-mbti_jobs = {
-    "ISTJ": [("데이터 분석가", "정확하고 신중한 ISTJ는 데이터의 논리적 해석에 강합니다."),
-             ("회계사", "정확성과 신뢰를 요하는 회계 업무에 탁월합니다.")],
-    "ISFJ": [("간호사", "타인을 돌보는 데 헌신적인 성향이 강합니다."),
-             ("사회복지사", "공감능력과 책임감으로 공동체에 기여합니다.")],
-    "INFJ": [("상담사", "깊은 통찰력과 직관으로 사람을 이해하고 도울 수 있습니다."),
-             ("작가", "풍부한 감성으로 의미 있는 이야기를 창조합니다.")],
-    "INTJ": [("AI 엔지니어", "논리적이며 미래지향적인 사고력으로 기술을 이끌 수 있습니다."),
-             ("전략기획가", "복잡한 문제 해결에 강한 능력을 발휘합니다.")],
-    "ISTP": [("기계 엔지니어", "도구와 시스템을 다루는 데 강한 능력이 있습니다."),
-             ("응급구조사", "위기 상황에 침착하고 신속하게 대처합니다.")],
-    "ISFP": [("플로리스트", "감각적이고 자연 친화적인 작업에 적합합니다."),
-             ("디자이너", "섬세한 미적 감각으로 창의력을 발휘합니다.")],
-    "INFP": [("시인", "깊은 감성을 시와 글로 표현할 수 있습니다."),
-             ("아동문학가", "아이들의 마음을 따뜻하게 울릴 수 있습니다.")],
-    "INTP": [("연구원", "새로운 지식을 탐구하는 데 탁월한 집중력을 발휘합니다."),
-             ("이론물리학자", "복잡한 개념을 창의적으로 연결하고 분석합니다.")],
-    "ESTP": [("세일즈 전문가", "에너지 넘치고 사람을 설득하는 능력이 뛰어납니다."),
-             ("이벤트 플래너", "즉흥적인 대응과 실행력이 요구되는 직무에 적합합니다.")],
-    "ESFP": [("MC / 엔터테이너", "주목받는 걸 좋아하고 감정을 잘 표현합니다."),
-             ("여행가이드", "활동적이며 사교적이라 여행을 즐겁게 만듭니다.")],
-    "ENFP": [("크리에이터", "무한한 아이디어로 대중과 소통합니다."),
-             ("광고기획자", "창의적 캠페인과 사람을 연결짓는 능력이 탁월합니다.")],
-    "ENTP": [("스타트업 창업가", "도전을 즐기며 변화를 선도하는 성격입니다."),
-             ("정치 컨설턴트", "말과 전략으로 판을 바꾸는 데 능숙합니다.")],
-    "ESTJ": [("공무원", "정확하고 조직적인 일 처리에 능숙합니다."),
-             ("프로젝트 매니저", "실행 중심적이며 효율적인 계획을 세웁니다.")],
-    "ESFJ": [("교사", "사람을 좋아하고 공동체 중심의 활동에 잘 어울립니다."),
-             ("간호 행정가", "타인 배려와 조직 운영을 동시에 잘 합니다.")],
-    "ENFJ": [("리더십 코치", "사람을 동기부여하고 성장하게 합니다."),
-             ("사회운동가", "타인을 위한 정의로운 삶을 추구합니다.")],
-    "ENTJ": [("CEO", "강한 추진력과 목표지향적 사고로 조직을 이끕니다."),
-             ("전략 컨설턴트", "문제 해결과 분석에 강한 전문가입니다.")]
+mbti_recommendations = {
+    "ISTJ": [("회계사", "정확성과 책임감이 요구되는 직업"),
+             ("공무원", "안정적인 환경과 절차 중심의 업무")],
+    "ISFJ": [("간호사", "사람을 돕고 헌신하는 직업"),
+             ("초등교사", "배려심 깊고 세심한 교육")],
+    "INFJ": [("상담가", "깊은 통찰력과 공감 능력"),
+             ("작가", "내면의 세계를 글로 표현")],
+    "INTJ": [("전략기획가", "장기적인 계획과 분석력"),
+             ("연구원", "논리적 사고와 독립적인 탐구")],
+    "ISTP": [("기계공학자", "손재주와 문제 해결 능력"),
+             ("파일럿", "위기 대응과 집중력")],
+    "ISFP": [("디자이너", "감각적이고 예술적인 표현"),
+             ("플로리스트", "자연과 감성의 조화")],
+    "INFP": [("작가", "창의적이고 감성적인 이야기 전달"),
+             ("심리학자", "사람의 마음을 이해하는 직업")],
+    "INTP": [("프로그래머", "논리적 문제 해결과 분석"),
+             ("철학자", "깊은 사고와 이론 탐구")],
+    "ESTP": [("기업가", "모험심과 추진력 있는 창업"),
+             ("스턴트맨", "액션과 도전을 즐기는 직업")],
+    "ESFP": [("방송인", "사람들과 어울리고 표현하는 직업"),
+             ("이벤트 플래너", "즐거운 경험을 만드는 일")],
+    "ENFP": [("광고기획자", "아이디어와 창의력의 조화"),
+             ("강연가", "열정적으로 사람들에게 영감을")],
+    "ENTP": [("발명가", "혁신적 사고와 도전 정신"),
+             ("스타트업 CEO", "빠른 결정과 실행력")],
+    "ESTJ": [("경영 관리자", "조직을 이끄는 리더십"),
+             ("군인", "질서와 체계 중심의 조직생활")],
+    "ESFJ": [("사회복지사", "타인을 돕고 공감하는 직업"),
+             ("HR매니저", "사람들과의 협력 중심 업무")],
+    "ENFJ": [("교사", "타인을 돕고 이끄는 역할"),
+             ("리더십 트레이너", "동기를 부여하고 지도")],
+    "ENTJ": [("CEO", "목표 달성에 집착하는 리더"),
+             ("정치가", "큰 그림을 보고 이끄는 힘")]
 }
 
-# 버튼 색상 스타일 (컬러풀하게!)
-button_styles = [
-    "background-color: #fd79a8;", "background-color: #a29bfe;", "background-color: #55efc4;",
-    "background-color: #ffeaa7;", "background-color: #74b9ff;", "background-color: #fab1a0;",
-    "background-color: #81ecec;", "background-color: #e17055;", "background-color: #dfe6e9;",
-    "background-color: #6c5ce7;", "background-color: #fdcb6e;", "background-color: #00cec9;",
-    "background-color: #e84393;", "background-color: #2d3436;", "background-color: #00b894;",
-    "background-color: #636e72;"
-]
-
-# MBTI 버튼 그리기
-st.markdown("### 👇 아래에서 당신의 MBTI를 선택하세요!")
-mbti_list = list(mbti_emojis.keys())
 selected_mbti = None
+clicked = st.session_state.get("clicked", None)
 
-rows = [mbti_list[i:i+4] for i in range(0, len(mbti_list), 4)]
+for mbti, emoji in mbti_emojis.items():
+    col = st.columns(4)[0]  # 한 줄에 1개씩 크게 배치하려면 이 부분 조정
+    if st.markdown(
+        f"""
+        <a href="?mbti={mbti}" class="mbti-button">{emoji} {mbti}</a>
+        """, unsafe_allow_html=True):
+        clicked = mbti
+        st.session_state.clicked = clicked
 
-for row in rows:
-    cols = st.columns(len(row))
-    for i, mbti in enumerate(row):
-        style = f"{button_styles[mbti_list.index(mbti)]} color: white; border-radius: 10px; padding: 10px; font-weight: bold;"
-        button_label = f"{mbti_emojis[mbti]} {mbti}"
-        if cols[i].button(button_label, key=mbti):
-            selected_mbti = mbti
+query_params = st.experimental_get_query_params()
+selected_mbti = query_params.get("mbti", [None])[0]
 
-# 결과 출력
 if selected_mbti:
-    st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown(f"<h2 style='text-align: center; color: #0984e3;'>{mbti_emojis[selected_mbti]} {selected_mbti} 추천 진로</h2>", unsafe_allow_html=True)
-    
-    for job, description in mbti_jobs[selected_mbti]:
+    st.markdown(f"<h2>{mbti_emojis[selected_mbti]} {selected_mbti} 추천 직업</h2>", unsafe_allow_html=True)
+    for job, desc in mbti_recommendations[selected_mbti]:
         with st.expander(f"💼 {job}"):
-            st.write(description)
+            st.markdown(f"- 설명: {desc}")
