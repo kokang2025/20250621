@@ -1,95 +1,92 @@
 import streamlit as st
 
-st.set_page_config(page_title="MBTI 진로 추천", layout="wide")
+st.set_page_config(page_title="MBTI 직업 추천", layout="wide")
 
-st.markdown(
-    """
-    <style>
-    .mbti-button {
-        display: inline-block;
-        margin: 10px;
-        padding: 20px 30px;
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: white;
-        background: linear-gradient(145deg, #6a11cb, #2575fc);
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        transition: transform 0.2s;
-    }
-    .mbti-button:hover {
-        transform: scale(1.05);
-        background: linear-gradient(145deg, #8e2de2, #4a00e0);
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown("<h1 style='text-align:center;'>🌟 MBTI 기반 진로 추천 웹앱 🌟</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #FF69B4;'>🌟 MBTI 기반 진로 추천 사이트 🌈</h1>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center;'>당신의 MBTI를 선택하면, 찰떡같은 직업을 추천해줄게요! 👀✨</h4>", unsafe_allow_html=True)
+st.markdown("---")
 
 mbti_emojis = {
-    "ISTJ": "🧱", "ISFJ": "🛡️", "INFJ": "🔮", "INTJ": "🧠",
-    "ISTP": "🔧", "ISFP": "🎨", "INFP": "💖", "INTP": "📘",
-    "ESTP": "🏎️", "ESFP": "🎉", "ENFP": "🌈", "ENTP": "🗣️",
-    "ESTJ": "📋", "ESFJ": "🤝", "ENFJ": "💡", "ENTJ": "🏆"
+    "ISTJ": "🧱",
+    "ISFJ": "🛡️",
+    "INFJ": "🔮",
+    "INTJ": "🧠",
+    "ISTP": "🔧",
+    "ISFP": "🎨",
+    "INFP": "💖",
+    "INTP": "📘",
+    "ESTP": "🏎️",
+    "ESFP": "🎉",
+    "ENFP": "🌈",
+    "ENTP": "🗣️",
+    "ESTJ": "📋",
+    "ESFJ": "🤝",
+    "ENFJ": "💡",
+    "ENTJ": "🏆"
 }
 
-mbti_recommendations = {
-    "ISTJ": [("회계사", "정확성과 책임감이 요구되는 직업"),
-             ("공무원", "안정적인 환경과 절차 중심의 업무")],
-    "ISFJ": [("간호사", "사람을 돕고 헌신하는 직업"),
-             ("초등교사", "배려심 깊고 세심한 교육")],
-    "INFJ": [("상담가", "깊은 통찰력과 공감 능력"),
-             ("작가", "내면의 세계를 글로 표현")],
-    "INTJ": [("전략기획가", "장기적인 계획과 분석력"),
-             ("연구원", "논리적 사고와 독립적인 탐구")],
-    "ISTP": [("기계공학자", "손재주와 문제 해결 능력"),
-             ("파일럿", "위기 대응과 집중력")],
-    "ISFP": [("디자이너", "감각적이고 예술적인 표현"),
-             ("플로리스트", "자연과 감성의 조화")],
-    "INFP": [("작가", "창의적이고 감성적인 이야기 전달"),
-             ("심리학자", "사람의 마음을 이해하는 직업")],
-    "INTP": [("프로그래머", "논리적 문제 해결과 분석"),
-             ("철학자", "깊은 사고와 이론 탐구")],
-    "ESTP": [("기업가", "모험심과 추진력 있는 창업"),
-             ("스턴트맨", "액션과 도전을 즐기는 직업")],
-    "ESFP": [("방송인", "사람들과 어울리고 표현하는 직업"),
-             ("이벤트 플래너", "즐거운 경험을 만드는 일")],
-    "ENFP": [("광고기획자", "아이디어와 창의력의 조화"),
-             ("강연가", "열정적으로 사람들에게 영감을")],
-    "ENTP": [("발명가", "혁신적 사고와 도전 정신"),
-             ("스타트업 CEO", "빠른 결정과 실행력")],
-    "ESTJ": [("경영 관리자", "조직을 이끄는 리더십"),
-             ("군인", "질서와 체계 중심의 조직생활")],
-    "ESFJ": [("사회복지사", "타인을 돕고 공감하는 직업"),
-             ("HR매니저", "사람들과의 협력 중심 업무")],
-    "ENFJ": [("교사", "타인을 돕고 이끄는 역할"),
-             ("리더십 트레이너", "동기를 부여하고 지도")],
-    "ENTJ": [("CEO", "목표 달성에 집착하는 리더"),
-             ("정치가", "큰 그림을 보고 이끄는 힘")]
+mbti_jobs = {
+    "ISTJ": ["회계사", "공무원", "데이터 분석가"],
+    "ISFJ": ["간호사", "교사", "사회복지사"],
+    "INFJ": ["상담가", "심리학자", "작가"],
+    "INTJ": ["전략기획가", "공학자", "정책분석가"],
+    "ISTP": ["기술자", "파일럿", "응급구조사"],
+    "ISFP": ["예술가", "디자이너", "요리사"],
+    "INFP": ["시인", "사회운동가", "상담사"],
+    "INTP": ["이론 물리학자", "연구원", "프로그래머"],
+    "ESTP": ["기업가", "스턴트맨", "판매 전문가"],
+    "ESFP": ["연예인", "이벤트 플래너", "헤어디자이너"],
+    "ENFP": ["마케팅 전문가", "작가", "기획자"],
+    "ENTP": ["발명가", "변호사", "기업가"],
+    "ESTJ": ["경영 관리자", "군인", "감독관"],
+    "ESFJ": ["간호사", "초등교사", "HR 담당자"],
+    "ENFJ": ["리더십 코치", "강사", "정치인"],
+    "ENTJ": ["CEO", "변호사", "전략 컨설턴트"]
 }
+
+mbti_descriptions = {
+    "ISTJ": "신중하고 책임감 있는 성격으로, 명확한 규칙과 질서를 선호해요.",
+    "ISFJ": "배려심이 많고 조용한 헌신형, 실용적이고 꼼꼼한 성격이에요.",
+    "INFJ": "통찰력 있고 깊이 있는 사고를 지닌 이상주의자예요.",
+    "INTJ": "전략적이고 독립적인 사고를 가진 분석가예요.",
+    "ISTP": "논리적이고 유연한 문제 해결 능력을 가진 기술자예요.",
+    "ISFP": "감성적이고 예술적 재능이 많은 자유로운 영혼이에요.",
+    "INFP": "감성적이고 이상주의적이며 공감 능력이 뛰어나요.",
+    "INTP": "호기심 많고 아이디어를 탐구하는 사색가예요.",
+    "ESTP": "에너지 넘치고 실용적이며 현실적인 성격이에요.",
+    "ESFP": "사교적이고 밝은 분위기를 좋아하는 엔터테이너예요.",
+    "ENFP": "열정적이고 창의적인 아이디어 뱅크예요.",
+    "ENTP": "재치 있고 논쟁을 즐기는 혁신가예요.",
+    "ESTJ": "체계적이고 리더십이 뛰어난 관리자예요.",
+    "ESFJ": "사람들을 돌보는 것을 즐기는 따뜻한 리더예요.",
+    "ENFJ": "사람들에게 영감을 주고자 하는 카리스마 있는 인도자예요.",
+    "ENTJ": "결단력 있고 실행력이 강한 리더형이에요."
+}
+
+colors = [
+    "#FFDAB9", "#E6E6FA", "#FFFACD", "#D1F2EB",
+    "#FADBD8", "#D6EAF8", "#F9E79F", "#E8DAEF",
+    "#D5F5E3", "#FDEDEC", "#EBDEF0", "#F6DDCC",
+    "#AED6F1", "#F5CBA7", "#F1948A", "#A3E4D7"
+]
 
 selected_mbti = None
-clicked = st.session_state.get("clicked", None)
+rows = [list(mbti_emojis.keys())[i:i+4] for i in range(0, 16, 4)]
 
-for mbti, emoji in mbti_emojis.items():
-    col = st.columns(4)[0]  # 한 줄에 1개씩 크게 배치하려면 이 부분 조정
-    if st.markdown(
-        f"""
-        <a href="?mbti={mbti}" class="mbti-button">{emoji} {mbti}</a>
-        """, unsafe_allow_html=True):
-        clicked = mbti
-        st.session_state.clicked = clicked
+for r, row in enumerate(rows):
+    cols = st.columns(4)
+    for i, mbti in enumerate(row):
+        button_label = f"<span style='font-size: 28px;'>{mbti_emojis[mbti]} <b>{mbti}</b></span>"
+        if cols[i].button(mbti, key=f"{mbti}_button"):
+            selected_mbti = mbti
+        cols[i].markdown(button_label, unsafe_allow_html=True)
 
-query_params = st.experimental_get_query_params()
-selected_mbti = query_params.get("mbti", [None])[0]
+st.markdown("---")
 
 if selected_mbti:
-    st.markdown(f"<h2>{mbti_emojis[selected_mbti]} {selected_mbti} 추천 직업</h2>", unsafe_allow_html=True)
-    for job, desc in mbti_recommendations[selected_mbti]:
+    st.markdown(f"<h2 style='color: #FF1493;'>{mbti_emojis[selected_mbti]} {selected_mbti} 추천 직업 ✨</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='font-size:18px;'>{mbti_descriptions[selected_mbti]}</p>", unsafe_allow_html=True)
+
+    for job in mbti_jobs[selected_mbti]:
         with st.expander(f"💼 {job}"):
-            st.markdown(f"- 설명: {desc}")
+            st.write(f"{job}에 대한 자세한 설명을 여기에 적을 수 있어요. 직업의 성격, 환경, 필요한 역량 등을 추가하세요.")
