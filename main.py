@@ -1,111 +1,88 @@
 import streamlit as st
 
-# --- 페이지 설정 ---
-st.set_page_config(page_title="MBTI 진로 추천", page_icon="🌟", layout="wide")
+# 페이지 설정
+st.set_page_config(page_title="MBTI 진로 추천 💼", page_icon="🧠", layout="wide")
 
-# --- CSS 스타일링 ---
-st.markdown("""
-    <style>
-    .title {
-        font-size: 48px;
-        font-weight: bold;
-        color: #5D3FD3;
-        text-align: center;
-    }
-    .subtitle {
-        font-size: 24px;
-        color: #FF69B4;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    .mbti-box {
-        font-size: 20px;
-        padding: 1.2em;
-        background: #ffffffaa;
-        border-radius: 20px;
-        box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-        margin-top: 20px;
-    }
-    .mbti-button {
-        font-size: 20px;
-        font-weight: bold;
-        color: white;
-        padding: 0.6em;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        margin: 4px;
-        width: 100%;
-    }
-    </style>
-""", unsafe_allow_html=True)
+st.markdown(
+    "<h1 style='text-align: center; color: #6c5ce7;'>💫 MBTI 성격유형별 진로 추천 💫</h1>",
+    unsafe_allow_html=True,
+)
+st.markdown("<hr>", unsafe_allow_html=True)
 
-# --- 제목 영역 ---
-st.markdown('<div class="title">🌈 MBTI 기반 진로 추천 웹앱 🚀</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">당신의 성격에 딱 맞는 직업을 추천해드립니다! 💼✨</div>', unsafe_allow_html=True)
-
-# --- 진로 데이터 (16개 MBTI)
-mbti_recommendations = {
-    "ISTJ": [("🧾 회계사", "정확하고 신중한 당신에게 잘 맞는 안정적인 직업입니다."),
-             ("👨‍✈️ 항공 관제사", "질서와 책임감을 갖춘 성격에 어울리는 고집중 직업입니다.")],
-    "ISFJ": [("👩‍⚕️ 간호사", "헌신적이고 따뜻한 마음으로 환자를 돌보는 데 적합합니다."),
-             ("🎓 초등학교 교사", "아이들을 보살피고 지도하는 데 어울리는 따뜻한 직업입니다.")],
-    "INFJ": [("📖 작가", "내면이 깊고 통찰력 있는 당신에게 어울리는 창의적 직업입니다."),
-             ("🧠 심리상담가", "다른 사람의 감정을 잘 이해하고 도와줄 수 있는 직업입니다.")],
-    "INTJ": [("💻 데이터 분석가", "체계적이고 논리적인 성향으로 미래를 설계할 수 있습니다."),
-             ("🧪 연구 과학자", "복잡한 문제를 분석하고 해결하는 데 탁월합니다.")],
-    "ISTP": [("🛠️ 기계 엔지니어", "문제를 직접 해결하고 손으로 만지는 실용 직업입니다."),
-             ("🚗 자동차 정비사", "기술을 바탕으로 즉각적인 성취를 느낄 수 있는 직업입니다.")],
-    "ISFP": [("🎨 일러스트레이터", "감성적이고 예술적인 표현이 가능한 창작 직업입니다."),
-             ("🐾 동물 관리사", "조용한 배려와 사랑으로 동물을 돌보는 직업입니다.")],
-    "INFP": [("✍️ 시인 / 소설가", "감정을 글로 표현해 사람들에게 감동을 주는 직업입니다."),
-             ("🎭 배우", "다양한 감정을 표현하고 관객과 교감하는 직업입니다.")],
-    "INTP": [("👨‍💻 프로그래머", "문제 해결을 위한 논리적 사고와 창의력이 요구되는 직업입니다."),
-             ("🧬 과학 이론가", "기존 지식을 비판적으로 분석하고 새로운 구조를 창조합니다.")],
-    "ESTP": [("📈 영업 전문가", "현장 중심의 대담함과 설득력이 빛나는 직업입니다."),
-             ("🏍️ 스포츠 트레이너", "활동적이고 역동적인 환경을 즐기는 당신에게 어울립니다.")],
-    "ESFP": [("🎤 연예인 / MC", "사람들 앞에서 빛나는 매력을 발산할 수 있는 무대 중심 직업입니다."),
-             ("🎉 이벤트 플래너", "즉흥성과 사람들과 어울리는 능력을 살릴 수 있는 직업입니다.")],
-    "ENFP": [("🌍 NGO 활동가", "열정과 이상을 행동으로 옮기는 사회 변화 중심 직업입니다."),
-             ("🎨 크리에이티브 디렉터", "창의력과 감성이 융합된 콘텐츠를 이끄는 직업입니다.")],
-    "ENTP": [("📣 브랜드 마케터", "아이디어로 사람을 움직이는 창의적인 소통 전문가입니다."),
-             ("🧠 혁신 컨설턴트", "새로운 전략을 제안하고 미래를 설계하는 역할입니다.")],
-    "ESTJ": [("🏛️ 공무원", "질서와 규칙을 존중하고 체계적 관리를 잘 수행하는 직업입니다."),
-             ("👮 경찰관", "현장에서 책임감 있게 조직을 유지하고 관리하는 역할입니다.")],
-    "ESFJ": [("👩‍🏫 중고등 교사", "배움과 돌봄을 함께 실천하는 따뜻한 조력자입니다."),
-             ("🤝 인사담당자", "사람 사이의 조율과 배려가 핵심인 직업입니다.")],
-    "ENFJ": [("📢 상담교사", "학생과 학부모 사이에서 갈등을 조정하는 정서적 리더입니다."),
-             ("🎙️ 발표 전문가", "대중 앞에서 사람들을 이끄는 소통형 직업입니다.")],
-    "ENTJ": [("📊 기업 CEO", "명확한 목표와 추진력으로 조직을 이끄는 전략가형 리더입니다."),
-             ("🧠 경영 컨설턴트", "복잡한 문제를 해결하고 방향을 제시하는 전략 전문가입니다.")]
+# MBTI 이모지 매핑
+mbti_emojis = {
+    "ISTJ": "🧱", "ISFJ": "🛡️", "INFJ": "🔮", "INTJ": "🧠",
+    "ISTP": "🔧", "ISFP": "🎨", "INFP": "💖", "INTP": "📘",
+    "ESTP": "🏎️", "ESFP": "🎉", "ENFP": "🌈", "ENTP": "🗣️",
+    "ESTJ": "📋", "ESFJ": "🤝", "ENFJ": "💡", "ENTJ": "🏆"
 }
 
-# --- 버튼 색상 매핑 ---
-color_map = {
-    "ISTJ": "#4B6587", "ISFJ": "#6A89CC", "INFJ": "#82CCDD", "INTJ": "#60A3BC",
-    "ISTP": "#F8C291", "ISFP": "#B8E994", "INFP": "#F6B93B", "INTP": "#786FA6",
-    "ESTP": "#EA8685", "ESFP": "#F3A683", "ENFP": "#F8EFBA", "ENTP": "#778beb",
-    "ESTJ": "#574b90", "ESFJ": "#FDA7DF", "ENFJ": "#C44569", "ENTJ": "#2C3A47"
+# 추천 작업과 설명
+mbti_jobs = {
+    "ISTJ": [("데이터 분석가", "정확하고 신중한 ISTJ는 데이터의 논리적 해석에 강합니다."),
+             ("회계사", "정확성과 신뢰를 요하는 회계 업무에 탁월합니다.")],
+    "ISFJ": [("간호사", "타인을 돌보는 데 헌신적인 성향이 강합니다."),
+             ("사회복지사", "공감능력과 책임감으로 공동체에 기여합니다.")],
+    "INFJ": [("상담사", "깊은 통찰력과 직관으로 사람을 이해하고 도울 수 있습니다."),
+             ("작가", "풍부한 감성으로 의미 있는 이야기를 창조합니다.")],
+    "INTJ": [("AI 엔지니어", "논리적이며 미래지향적인 사고력으로 기술을 이끌 수 있습니다."),
+             ("전략기획가", "복잡한 문제 해결에 강한 능력을 발휘합니다.")],
+    "ISTP": [("기계 엔지니어", "도구와 시스템을 다루는 데 강한 능력이 있습니다."),
+             ("응급구조사", "위기 상황에 침착하고 신속하게 대처합니다.")],
+    "ISFP": [("플로리스트", "감각적이고 자연 친화적인 작업에 적합합니다."),
+             ("디자이너", "섬세한 미적 감각으로 창의력을 발휘합니다.")],
+    "INFP": [("시인", "깊은 감성을 시와 글로 표현할 수 있습니다."),
+             ("아동문학가", "아이들의 마음을 따뜻하게 울릴 수 있습니다.")],
+    "INTP": [("연구원", "새로운 지식을 탐구하는 데 탁월한 집중력을 발휘합니다."),
+             ("이론물리학자", "복잡한 개념을 창의적으로 연결하고 분석합니다.")],
+    "ESTP": [("세일즈 전문가", "에너지 넘치고 사람을 설득하는 능력이 뛰어납니다."),
+             ("이벤트 플래너", "즉흥적인 대응과 실행력이 요구되는 직무에 적합합니다.")],
+    "ESFP": [("MC / 엔터테이너", "주목받는 걸 좋아하고 감정을 잘 표현합니다."),
+             ("여행가이드", "활동적이며 사교적이라 여행을 즐겁게 만듭니다.")],
+    "ENFP": [("크리에이터", "무한한 아이디어로 대중과 소통합니다."),
+             ("광고기획자", "창의적 캠페인과 사람을 연결짓는 능력이 탁월합니다.")],
+    "ENTP": [("스타트업 창업가", "도전을 즐기며 변화를 선도하는 성격입니다."),
+             ("정치 컨설턴트", "말과 전략으로 판을 바꾸는 데 능숙합니다.")],
+    "ESTJ": [("공무원", "정확하고 조직적인 일 처리에 능숙합니다."),
+             ("프로젝트 매니저", "실행 중심적이며 효율적인 계획을 세웁니다.")],
+    "ESFJ": [("교사", "사람을 좋아하고 공동체 중심의 활동에 잘 어울립니다."),
+             ("간호 행정가", "타인 배려와 조직 운영을 동시에 잘 합니다.")],
+    "ENFJ": [("리더십 코치", "사람을 동기부여하고 성장하게 합니다."),
+             ("사회운동가", "타인을 위한 정의로운 삶을 추구합니다.")],
+    "ENTJ": [("CEO", "강한 추진력과 목표지향적 사고로 조직을 이끕니다."),
+             ("전략 컨설턴트", "문제 해결과 분석에 강한 전문가입니다.")]
 }
 
-# --- MBTI 버튼 UI 출력 ---
-st.subheader("👆 MBTI를 눌러 진로를 확인해보세요!")
+# 버튼 색상 스타일 (컬러풀하게!)
+button_styles = [
+    "background-color: #fd79a8;", "background-color: #a29bfe;", "background-color: #55efc4;",
+    "background-color: #ffeaa7;", "background-color: #74b9ff;", "background-color: #fab1a0;",
+    "background-color: #81ecec;", "background-color: #e17055;", "background-color: #dfe6e9;",
+    "background-color: #6c5ce7;", "background-color: #fdcb6e;", "background-color: #00cec9;",
+    "background-color: #e84393;", "background-color: #2d3436;", "background-color: #00b894;",
+    "background-color: #636e72;"
+]
+
+# MBTI 버튼 그리기
+st.markdown("### 👇 아래에서 당신의 MBTI를 선택하세요!")
+mbti_list = list(mbti_emojis.keys())
 selected_mbti = None
-mbti_types = list(mbti_recommendations.keys())
-rows = [mbti_types[i:i+4] for i in range(0, 16, 4)]
+
+rows = [mbti_list[i:i+4] for i in range(0, len(mbti_list), 4)]
 
 for row in rows:
     cols = st.columns(len(row))
     for i, mbti in enumerate(row):
-        btn_style = f"""
-            <button class="mbti-button" style="background-color: {color_map[mbti]};" onclick="window.location.href='#{mbti}'">{mbti}</button>
-        """
-        if cols[i].button(f"{mbti}", key=mbti):
+        style = f"{button_styles[mbti_list.index(mbti)]} color: white; border-radius: 10px; padding: 10px; font-weight: bold;"
+        button_label = f"{mbti_emojis[mbti]} {mbti}"
+        if cols[i].button(button_label, key=mbti):
             selected_mbti = mbti
 
-# --- 추천 결과 출력 ---
+# 결과 출력
 if selected_mbti:
-    st.markdown(f"<div class='mbti-box'><h3>{selected_mbti} 유형의 추천 직업 ✨</h3></div>", unsafe_allow_html=True)
-    for job, desc in mbti_recommendations[selected_mbti]:
-        with st.expander(f"{job} 자세히 보기"):
-            st.markdown(f"💬 {desc}")
+    st.markdown("<hr>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align: center; color: #0984e3;'>{mbti_emojis[selected_mbti]} {selected_mbti} 추천 진로</h2>", unsafe_allow_html=True)
+    
+    for job, description in mbti_jobs[selected_mbti]:
+        with st.expander(f"💼 {job}"):
+            st.write(description)
